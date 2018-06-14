@@ -5,6 +5,7 @@ import Login from '../pages/Login.vue'
 import Register from '../pages/Register.vue'
 import Galleries from '../pages/Galleries.vue'
 import Gallery from '../pages/Gallery.vue'
+import Author from '../pages/Author.vue'
 
 import { requiresAuth , guestOnly} from './guards'
 
@@ -17,6 +18,8 @@ const routes = [
    {path: '/register', component:Register, name: 'register', meta: {guestOnly:true}},
    {path: '/galleries', component:Galleries, name: 'galleries', meta: {requiresAuth:true}},
    {path: '/gallery/:id', component:Gallery, name: 'gallery', meta: {requiresAuth:true}},
+   {path: '/authors/:id', component:Author, name: 'author', meta: {requiresAuth:true}},
+   {path: '/my-galleries', component:Author, name: 'my-galleries', meta: {requiresAuth:true}},
   
 ]
 

@@ -3,7 +3,7 @@
 
 <div class="card" style="width: 18rem;">
   <div class="card-body">
-    <form class="form-horizontal">
+    <form class="form-horizontal" @submit.prevent="addUser">
   <div class="form-group">
     <label for="first_name" class="control-label col-xs-4">First name</label> 
     <div class="col-xs-8">
@@ -55,7 +55,27 @@
 
 
 <script>
-	export default {
 
+import { authService } from '../services/Auth'
+import { register } from '../services/Register'
+
+	export default {
+		data(){
+			return{
+				newUser : {
+					first_name: '',
+					last_name: '',
+					accepted_terms_and_conditions: '',
+					email: '',
+					password: '',
+					password_confirmation: '',
+				}
+			}
+		},
+
+		methods: {
+			addUser
+		}
 	}
 </script>
+
