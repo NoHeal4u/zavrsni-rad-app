@@ -4,14 +4,19 @@ import VueRouter from 'vue-router'
 import Login from '../pages/Login.vue'
 import Register from '../pages/Register.vue'
 import Galleries from '../pages/Galleries.vue'
+import Gallery from '../pages/Gallery.vue'
+
+import { requiresAuth , guestOnly} from './guards'
+
 
 Vue.use(VueRouter)
 
 const routes = [
-   { path: '/', redirect: '/login' },
-   {path: '/login', component:Login, name: 'login'},
-   {path: '/register', component:Register, name: 'register'},
-   {path: '/galleries', component:Galleries, name: 'galleries'},
+   { path: '/', redirect: '/galleries' },
+   {path: '/login', component:Login, name: 'login', meta: {guestOnly:true}},
+   {path: '/register', component:Register, name: 'register', meta: {guestOnly:true}},
+   {path: '/galleries', component:Galleries, name: 'galleries', meta: {requiresAuth:true}},
+   {path: '/gallery/:id', component:Gallery, name: 'gallery', meta: {requiresAuth:true}},
   
 ]
 
@@ -19,6 +24,18 @@ const router = new VueRouter({
   routes,
   mode: 'history'
 })
+
+router.beforeEach((to, from, next) => {
+    Promise.resolve(to)
+      .then(requiresAuth)
+      .then(guestOnly)
+      .then(() => {
+        next()
+      })
+      .catch(redirect => {
+        next(redirect)
+      })
+  })
 
 
 export default router 
