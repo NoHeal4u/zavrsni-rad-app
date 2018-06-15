@@ -5,7 +5,7 @@ export default class Registration {
     axios.defaults.baseURL = 'http://localhost:8000/api/'
   }
 
-  get ($user) {
+  registerUser (user) {
     return axios.post(`register`, user)
   }
 
