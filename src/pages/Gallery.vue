@@ -8,6 +8,22 @@
     <p class="card-text">Description: {{ gallery.description }} </p>
   </div>
 </div>
+<b-carousel id="carousel1"
+            style="text-shadow: 1px 1px 2px #333;"
+            controls
+            indicators
+            background="#ababab"
+            :interval="4000"
+            img-width="1024"
+            img-height="480"
+            >
+      <!-- Text slides with image -->
+    <b-carousel-slide 
+      caption="First slide"
+      v-for="image in gallery.gallery_has_many_images"
+      img-src="image.images"
+      ></b-carousel-slide>
+</b-carousel>
 </div>
 </template>
 
