@@ -35,6 +35,7 @@ import { galleries } from '../services/Galleries'
 			return {
 				galleries:[],
 				search: ''
+				
 			}
 		},
 
@@ -47,6 +48,7 @@ import { galleries } from '../services/Galleries'
 			}).catch((error)=>{
 				console.log(error)
 			})
+			
 		},
 
 		computed:{

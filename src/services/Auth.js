@@ -6,7 +6,12 @@ export default class AuthService {
       email, password
     }).then(data => {
       window.localStorage.setItem('loginToken', data.data.token)
+      window.localStorage.setItem('userId', data.data.user.id )
       this.setAxiosDefaultAuthorizationHeader()
+      
+      // console.log(data.data.user)
+      // console.log(localStorage.getItem('userId'))
+
     })
   }
 
@@ -17,6 +22,7 @@ export default class AuthService {
 
   logout() {
     window.localStorage.removeItem('loginToken')
+    window.localStorage.removeItem('userId')
     delete axios.defaults.headers.common['Authorization']
   }
 
