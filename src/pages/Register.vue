@@ -59,7 +59,7 @@
       placeholder="**********" 
       class="form-control" 
       required="required" 
-      type="password">
+      type="text">
     </div>
   </div>
   <div class="form-group">
