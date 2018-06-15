@@ -3,7 +3,7 @@
 
 <div class="card" style="width: 18rem;">
   <div class="card-body">
-    <form class="form-horizontal" @submit.prevent="addUser">
+    <form class="form-horizontal"  @submit.prevent="addUser">
   <div class="form-group">
     <label for="first_name" class="control-label col-xs-4">First name</label> 
     <div class="col-xs-8">
@@ -34,13 +34,15 @@
       placeholder="JohnDoe@gmail.com" 
       class="form-control" 
       required="required" 
-      type="text">
+      type="email">
     </div>
   </div>
   <div class="form-group">
+    <p v-if="validationFailedConfirmation" class="alert alert-danger">password must be at least 8 characters long and it must contain at least one number</p>
     <label for="password" class="control-label col-xs-4">Password</label> 
     <div class="col-xs-8">
       <input 
+      
       v-model="newUser.password" 
       placeholder="*********" 
       class="form-control" 
@@ -56,7 +58,7 @@
       placeholder="**********" 
       class="form-control" 
       required="required" 
-      type="text">
+      type="password">
     </div>
   </div>
   <div class="form-group">
@@ -66,6 +68,7 @@
         <input 
         v-model="newUser.accepted_terms_and_conditions"
         value="true" 
+        required="required"
         type="checkbox">
               I accept terms and conditions
       </label> 
@@ -97,19 +100,27 @@ import { register } from '../services/Register'
 					email: '',
 					password: '',
 					password_confirmation: '',
-				}
+				},
+
+        error:[],
+        validationFailedConfirmation : false
 			}
 		},
 
 		methods: {
 			addUser(){
+
+        if(this.newUser.password === this.newUser.password_confirmation & this.newUser.password.length >=8){
         register.registerUser(this.newUser)
         .then((response)=>{
           this.register = response.data
           console.log(this.register)
+          // this.error = response.data
+          // console.log(this.error)
         })
         .catch((error)=>{
           console.log(error)
+
         })
 
        
@@ -117,8 +128,24 @@ import { register } from '../services/Register'
         .then(()=>{
         this.$router.push({ name: 'galleries'}) //ovo treba promeniti
         })
-          }
-		}
+      }else{this.validationFailedConfirmation = true}
+      }
+		},
+    // computed:{
+    //   validationCheck: function(){
+    //      // if (this.error.succes = false) {
+    //      //  return
+    //      // }
+    //      if (this.password != this.password_confirmation) {
+    //       return this.validationFailed = true
+    //      }else{
+    //       return validationFailed = false
+    //      }
+    //   }
+    // }
+
+
+
 	}
 </script>
 
