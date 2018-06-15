@@ -1,7 +1,10 @@
 <template>
 <div>
-<div v-if="galleries != null">
-<div v-for="gallery in galleries" class="card" style="width: 18rem;">
+	<div class="navbar-nav">
+	<input class="nav-item nav-link" type="text" v-model="search" placeholder="search galleries">
+    </div>
+<div v-if="filteredGalleries.length != 0">
+<div v-for="gallery in filteredGalleries" class="card" style="width: 18rem;">
   <img class="card-img-top" v-bind:src="gallery.gallery_has_one_image.images" alt="Card image cap">
   <div class="card-body">
     <p>Gallery title:</p>
@@ -30,7 +33,8 @@ import { galleries } from '../services/Galleries'
 		
 		data(){
 			return {
-				galleries:[]
+				galleries:[],
+				search: ''
 			}
 		},
 
@@ -43,6 +47,15 @@ import { galleries } from '../services/Galleries'
 			}).catch((error)=>{
 				console.log(error)
 			})
+		},
+
+		computed:{
+			filteredGalleries: function(){
+				return this.galleries.filter((gallery)=> {
+					return gallery.gallery_name.match(this.search)
+
+				})
+			}
 		}
 
 

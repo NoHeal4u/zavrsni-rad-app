@@ -29,7 +29,7 @@ import { authService } from '../services/Auth'
 			login(){
 				authService.login(this.email, this.password)
 				.then(()=>{
-				this.$router.push({ name: 'register'})
+				this.$router.push({ name: 'galleries'}) //ovo treba promeniti
 				})
 			}
 		}

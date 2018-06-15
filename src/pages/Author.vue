@@ -1,8 +1,11 @@
 <template>
 <div>
+	<div class="navbar-nav">
+	<input class="nav-item nav-link" type="text" v-model="search" placeholder="search galleries">
+    </div>
 <h2>{{ user.first_name }} {{ user.last_name }}'s galleries</h2>
-<div v-if="user != null">
-<div v-for="gallery in user.user_has_many_galleries" class="card" style="width: 18rem;">
+<div v-if="filteredGalleries.length != 0">
+<div v-for="gallery in filteredGalleries" class="card" style="width: 18rem;">
   <img class="card-img-top" v-bind:src="gallery.gallery_has_one_image.images" alt="Card image cap">
   <div class="card-body">
   <p>Gallery name:</p>
@@ -27,7 +30,8 @@ import { authors } from '../services/Author'
 		
 		data(){
 			return {
-				user:[]
+				user:[],
+				search: ''
 			}
 		},
 
@@ -40,6 +44,14 @@ import { authors } from '../services/Author'
 			}).catch((error)=>{
 				console.log(error)
 			})
+		},
+		computed:{
+			filteredGalleries: function(){
+				return this.user.user_has_many_galleries.filter((gallery)=> {
+					return gallery.gallery_name.match(this.search)
+
+				})
+			}
 		}
 
 

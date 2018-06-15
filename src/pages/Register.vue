@@ -107,10 +107,17 @@ import { register } from '../services/Register'
         .then((response)=>{
           this.register = response.data
           console.log(this.register)
-        }).catch((error)=>{
+        })
+        .catch((error)=>{
           console.log(error)
         })
-      }
+
+       
+        authService.login(this.newUser.email, this.newUser.password)
+        .then(()=>{
+        this.$router.push({ name: 'galleries'}) //ovo treba promeniti
+        })
+          }
 		}
 	}
 </script>
