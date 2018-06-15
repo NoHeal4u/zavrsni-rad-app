@@ -38,7 +38,8 @@
     </div>
   </div>
   <div class="form-group">
-    <p v-if="validationFailedConfirmation" class="alert alert-danger">password must be at least 8 characters long and it must contain at least one number</p>
+    <p v-if="validationFailedConfirmation" class="alert alert-danger">password must match confirm password field</p>
+    <p v-if="validationFailedRegex" class="alert alert-danger">password must be 8 characters long and contain at least one number</p>
     <label for="password" class="control-label col-xs-4">Password</label> 
     <div class="col-xs-8">
       <input 
@@ -103,14 +104,20 @@ import { register } from '../services/Register'
 				},
 
         error:[],
-        validationFailedConfirmation : false
+        validationFailedConfirmation : false,
+        validationFailedRegex:false,
+        validationRegex: RegExp('^([0-9]+[a-zA-Z]+|[a-zA-Z]+[0-9]+)[0-9a-zA-Z]*$')
 			}
 		},
 
 		methods: {
 			addUser(){
 
-        if(this.newUser.password === this.newUser.password_confirmation & this.newUser.password.length >=8){
+        if(this.newUser.password === this.newUser.password_confirmation){
+          this.validationFailedConfirmation = false;
+          if( this.newUser.password.length >=8 & this.validationRegex.test(this.newUser.password))
+          {
+              console.log(this.validationRegex.test(this.newUser.password))
         register.registerUser(this.newUser)
         .then((response)=>{
           this.register = response.data
@@ -128,18 +135,19 @@ import { register } from '../services/Register'
         .then(()=>{
         this.$router.push({ name: 'galleries'}) //ovo treba promeniti
         })
+       }else{this.validationFailedRegex = true}
       }else{this.validationFailedConfirmation = true}
       }
 		},
     // computed:{
     //   validationCheck: function(){
-    //      // if (this.error.succes = false) {
-    //      //  return
-    //      // }
-    //      if (this.password != this.password_confirmation) {
-    //       return this.validationFailed = true
-    //      }else{
-    //       return validationFailed = false
+    //      // // if (this.error.succes = false) {
+    //      // //  return
+    //      // // }
+    //      // if (this.password != this.password_confirmation) {
+    //      //  return this.validationFailed = true
+    //      // }else{
+    //      //  return validationFailed = false
     //      }
     //   }
     // }
