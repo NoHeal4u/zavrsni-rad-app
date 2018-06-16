@@ -8,22 +8,32 @@
     <p class="card-text">Description: {{ gallery.description }} </p>
   </div>
 </div>
-<b-carousel id="carousel1"
+<div class="card" style="width: 18rem;">
+	<b-carousel id="carousel1"
             style="text-shadow: 1px 1px 2px #333;"
             controls
             indicators
             background="#ababab"
             :interval="4000"
-            img-width="1024"
-            img-height="480"
-            >
+             >
       <!-- Text slides with image -->
     <b-carousel-slide 
-      caption="First slide"
       v-for="image in gallery.gallery_has_many_images"
-      img-src="image.images"
-      ></b-carousel-slide>
+      
+
+      ><img 
+      slot="img" 
+      class="d-block img-fluid w-100" 
+      width="562" 
+      height="240"
+      v-bind:src="image.images" 
+      alt="image slot"
+      v-on:click="openInNewTab(image.images)"
+        ></b-carousel-slide>
 </b-carousel>
+</div>
+
+<!-- <img v-for="image in images" v-bind:src="image.images"> -->
 </div>
 </template>
 
@@ -36,6 +46,7 @@ import { galleries } from '../services/Galleries'
 		data(){
 			return {
 				gallery:[]
+				
 			}
 		},
 
@@ -44,10 +55,17 @@ import { galleries } from '../services/Galleries'
 			galleries.get(this.$route.params.id)
 			.then((response) => {
 				this.gallery = response.data
+				
+
 				console.log(this.gallery)
 			}).catch((error)=>{
 				console.log(error)
 			})
+		},
+		methods: {
+			openInNewTab(link){
+				window.open(link, '_blank')
+			}
 		}
 
 
