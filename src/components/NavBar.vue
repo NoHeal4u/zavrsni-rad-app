@@ -6,8 +6,7 @@
       <router-link class="nav-item nav-link" to="/register" v-if="!isAuthenticated" >Register</router-link>
       <router-link class="nav-item nav-link" to="/galleries">All Galeries</router-link>
       <router-link class="nav-item nav-link" to="/create" v-if="isAuthenticated" >Create new gallery</router-link>
-      <router-link class="nav-item nav-link" 
-      :to="{ name: 'my-galleries', params: { id: loggedUser }}" v-if="isAuthenticated" >My Galleries
+      <router-link class="nav-item nav-link" to="/my-galleries" v-if="isAuthenticated" >My Galleries
       </router-link>
       <a href="#" class="nav-item nav-link" @click="logout" v-if="isAuthenticated">Logout</a>
     </div>

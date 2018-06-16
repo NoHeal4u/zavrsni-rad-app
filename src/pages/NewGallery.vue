@@ -1,7 +1,7 @@
 <template>
 	
 
-<div class="card" style="width: 18rem;">
+<div class="card" style="width: 28rem;">
   <div class="card-body">
     <form class="form-horizontal" @submit.prevent="addNewGallery" >
   <div class="form-group">
@@ -27,17 +27,28 @@
   </div>
   <div>
   	<button  class="btn btn-sml" @click.prevent="addNewImageInput" >Add more images</button>
+  	<p v-if="notifyOneImage" class="alert alert-danger" >You must post at least one image</p>
+  	
+  		
     <div class="form-group"
     	v-for="(images, index) in newGallery.images">
     <label for="description" class="control-label col-xs-4">Add image (index: {{ index }} )</label> 
     <div class="col-xs-8">
+    	<div class="form-group row">
       <input 
       v-model="images.image"
       placeholder="Image URL" 
       class="form-control"  
       type="url">
+       <button  class="btn btn-sml" @click.prevent="removeImage(index)" >Remove image</button>
+       <button  class="btn btn-sml" @click.prevent="moveUp(index)" >Move image up</button>
+       <button  class="btn btn-sml" @click.prevent="moveDown(index)" >Move image down</button>
+    </div>
+   
     </div>
   </div>
+  
+
   </div>
   <div class="form-group row">
     <div class="col-xs-offset-4 col-xs-8">
@@ -63,24 +74,25 @@ import { galleries } from '../services/Galleries'
 					images : []
 					
 				},
-				arrayStrings: []
+				notifyOneImage : false,
+				arrayStrings: [].
+				loggedUser
 			}
 		},
 		methods: {
 			addNewImageInput(){
 				this.newGallery.images.push({image:''})
 
-				// imagesIntoString(){
-				// 	this.arrayStrings = this.newGallery.images.map(function (obj) 
-				// 	{
-  		// 			return obj.image;
-				// 	})
-			 //    }
-				console.log(this.newGallery)
+			
 			},
 			addNewGallery(){
 				
-
+				this.newGallery.images = this.newGallery.images.map(function (obj) 
+					{
+  					return obj.image;
+  					
+					})
+				console.log(this.newGallery)
 				galleries.add(this.newGallery)
 					.then((response)=>{
           				this.galleries = response.data
@@ -90,9 +102,35 @@ import { galleries } from '../services/Galleries'
         				.catch((error)=>{
           				console.log(error)
 
+        				}).then(()=>{
+        					this.$router.push({ name: 'my-galleries', params: `id: ${this.loggedUser}` }) //ovo treba promeniti
         				})
+			},
+			removeImage(index){
+				if (index != 0){
+					this.newGallery.images.splice(index, 1)
+				}else{
+					this.notifyOneImage = true
+				}
+				
+			},
+			moveUp(index){
+				if (index !=0) {	
+					this.newGallery.images.splice(index-1, 0, this.newGallery.images[index])
+					this.newGallery.images.splice(index+1,1)		
+				}
+			},
+			moveDown(index){
+				if(index != this.newGallery.images.length-1){
+					this.newGallery.images.splice(index+2, 0, this.newGallery.images[index])
+					this.newGallery.images.splice(index,1)
+				}
 			}
-		}
+		},
+		created(){
+      		this.loggedUser = window.localStorage.getItem('userId')
+      		console.log(JSON.stringify(this.loggedUser))
+    	}
    }
 </script>
 
