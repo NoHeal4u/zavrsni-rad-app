@@ -3,7 +3,9 @@
 <div class="card" style="width: 18rem;">
   <div class="card-body">
     <h5 class="card-title">{{ gallery.gallery_name}}</h5>
-    <p class="card-text">Author: {{ gallery.user.first_name }} {{ gallery.user.last_name }}</p>
+    <p class="card-text" >Author:</p>
+    <router-link class="card-text" :to="{ name: 'author', params: { id: gallery.user.id }}"> {{ gallery.user.first_name }} {{ gallery.user.last_name }}
+    </router-link>
     <p class="card-text">Creation date: {{ gallery.created_at }} </p>
     <p class="card-text">Description: {{ gallery.description }} </p>
   </div>
@@ -31,6 +33,7 @@
       v-on:click="openInNewTab(image.images)"
         ></b-carousel-slide>
 </b-carousel>
+<button v-if="mineGallery" @click.prevent="deleteGallery">Delete</button>
 </div>
 
 <!-- <img v-for="image in images" v-bind:src="image.images"> -->
@@ -45,28 +48,59 @@ import { galleries } from '../services/Galleries'
 		
 		data(){
 			return {
-				gallery:[]
+				gallery:[],
+				mineGallery: false,
+				loggedUser: '',
+				currentUserId: ''
 				
 			}
 		},
 
 
 		created() {
+			// this.loggedUser = window.localStorage.getItem('userId')
+
 			galleries.get(this.$route.params.id)
 			.then((response) => {
 				this.gallery = response.data
-				
-
-				console.log(this.gallery)
+				this.currentUserId = this.gallery.user_id.toString()
+				this.loggedUser = JSON.stringify(window.localStorage.getItem('userId'))
+				// console.log(this.gallery)
 			}).catch((error)=>{
 				console.log(error)
 			})
+
+			 // this.loggedUser = JSON.stringify(window.localStorage.getItem('userId'))
+      		 // console.log(this.loggedUser)
+    //   			if (window.localStorage.getItem('userId') == this.currentUserId) {
+				// 	this.loggedUser = true
+				// } this.loggedUser = false
+      		// if (this.loggedUser === this.gallery.user_id) {
+
+
+      		if ( this.loggedUser === this.currentUserId) {
+					this.mineGallery = true
+				}else { this.mineGallery = false }
 		},
 		methods: {
 			openInNewTab(link){
 				window.open(link, '_blank')
+				// console.log(this.isThisGalleryMine)
+				
+
+				// console.log(typeof this.currentUserId)
+				// console.log(typeof window.localStorage.getItem('userId'))
+				// console.log(this.mineGallery)
 			}
-		}
+		},
+		// computed:{
+		// 	isThisGalleryMine : function (){
+		// 		if (window.localStorage.getItem('userId') === this.gallery.user_id) {
+		// 			return true
+		// 		} return false
+		// 	}
+
+		// }
 
 
 	}

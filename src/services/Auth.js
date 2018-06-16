@@ -9,7 +9,7 @@ export default class AuthService {
       window.localStorage.setItem('userId', data.data.user.id )
       this.setAxiosDefaultAuthorizationHeader()
       
-      // console.log(data.data.user)
+      console.log(data.data.user.id)
       // console.log(localStorage.getItem('userId'))
 
     })

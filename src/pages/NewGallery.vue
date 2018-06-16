@@ -52,7 +52,10 @@
   </div>
   <div class="form-group row">
     <div class="col-xs-offset-4 col-xs-8">
-      <button name="submit" type="submit" class="btn btn-primary">Submit</button>
+    	
+      		<button name="submit" type="submit" class="btn btn-primary">Submit</button>
+      		<button name="submit" @click.prevent="cancel" class="btn btn-primary">Cancel</button>
+      	
     </div>
   </div>
 </form>
@@ -103,7 +106,7 @@ import { galleries } from '../services/Galleries'
           				console.log(error)
 
         				}).then(()=>{
-        					this.$router.push({ name: 'my-galleries', params: `id: ${this.loggedUser}` }) //ovo treba promeniti
+        					this.$router.push({ name: 'my-galleries' }) //ovo treba promeniti
         				})
 			},
 			removeImage(index){
@@ -125,11 +128,14 @@ import { galleries } from '../services/Galleries'
 					this.newGallery.images.splice(index+2, 0, this.newGallery.images[index])
 					this.newGallery.images.splice(index,1)
 				}
+			},
+			cancel(){
+				this.$router.push({ name: 'my-galleries' })
 			}
 		},
 		created(){
-      		this.loggedUser = window.localStorage.getItem('userId')
-      		console.log(JSON.stringify(this.loggedUser))
+      		// this.loggedUser = window.localStorage.getItem('userId')
+      		// console.log(JSON.stringify(this.loggedUser))
     	}
    }
 </script>

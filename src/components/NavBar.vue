@@ -23,8 +23,9 @@
       }
     },
     created(){
-      this.loggedUser = window.localStorage.getItem('userId')
-      console.log(JSON.stringify(this.loggedUser))
+      // this.loggedUser = window.localStorage.getItem('userId')
+      // console.log(JSON.stringify(this.loggedUser))
+      authService.isAuthenticated()
     },
 
     methods: {

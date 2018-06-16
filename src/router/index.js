@@ -19,7 +19,7 @@ const routes = [
    {path: '/login', component:Login, name: 'login', meta: {guestOnly:true}},
    {path: '/register', component:Register, name: 'register', meta: {guestOnly:true}},
    {path: '/galleries', component:Galleries, name: 'galleries', meta: {requiresAuth:true}},
-   {path: '/gallery/:id', component:Gallery, name: 'gallery', meta: {requiresAuth:true}},
+   {path: '/galleries/:id', component:Gallery, name: 'gallery', meta: {requiresAuth:true}},
    {path: '/authors/:id', component:Author, name: 'author', meta: {requiresAuth:true}},
    {path: '/my-galleries', component:MyGalleries, name: 'my-galleries', meta: {requiresAuth:true}},
    {path: '/create', component:NewGallery, name: 'new-gallery', meta: {requiresAuth:true}}
