@@ -6,10 +6,10 @@ export default class AuthService {
       email, password
     }).then(data => {
       window.localStorage.setItem('loginToken', data.data.token)
-      window.localStorage.setItem('userId', data.data.user.id )
+      window.localStorage.setItem('userId', JSON.parse(data.data.user.id) )
       this.setAxiosDefaultAuthorizationHeader()
       
-      console.log(data.data.user.id)
+      console.log(JSON.parse(data.data.user.id))
       // console.log(localStorage.getItem('userId'))
 
     })

@@ -62,9 +62,10 @@ import { galleries } from '../services/Galleries'
 
 			galleries.get(this.$route.params.id)
 			.then((response) => {
+				console.log(response.data)
 				this.gallery = response.data
 				this.currentUserId = this.gallery.user_id.toString()
-				this.loggedUser = JSON.stringify(window.localStorage.getItem('userId'))
+				this.loggedUser = window.localStorage.getItem('userId')
 				// console.log(this.gallery)
 			}).catch((error)=>{
 				console.log(error)
@@ -78,9 +79,9 @@ import { galleries } from '../services/Galleries'
       		// if (this.loggedUser === this.gallery.user_id) {
 
 
-      		if ( this.loggedUser === this.currentUserId) {
-					this.mineGallery = true
-				}else { this.mineGallery = false }
+    //   		if ( this.loggedUser == this.currentUserId) {
+				// 	this.mineGallery = true
+				// }else { this.mineGallery = false }
 		},
 		methods: {
 			openInNewTab(link){
@@ -88,11 +89,33 @@ import { galleries } from '../services/Galleries'
 				// console.log(this.isThisGalleryMine)
 				
 
-				// console.log(typeof this.currentUserId)
-				// console.log(typeof window.localStorage.getItem('userId'))
-				// console.log(this.mineGallery)
+				console.log(this.currentUserId)
+				console.log(this.loggedUser)
+				console.log(this.mineGallery)
+			},
+			deleteGallery(){
+				if (confirm("Confirm deletion!")) {
+    				galleries.remove(this.gallery.id)
+    				.then((response) => {
+    					console.log(response.data)
+    				})
+    				.then(()=>{
+        				this.$router.push({ name: 'my-galleries'}) 
+        			})
+    				.catch((error)=>{
+						console.log(error)
+					})
+
+				} 
 			}
 		},
+		updated: function () {
+  					this.$nextTick(function () {
+	    				if ( this.loggedUser == this.currentUserId) {
+							this.mineGallery = true
+						}else { this.mineGallery = false }
+  					})
+				}	
 		// computed:{
 		// 	isThisGalleryMine : function (){
 		// 		if (window.localStorage.getItem('userId') === this.gallery.user_id) {
