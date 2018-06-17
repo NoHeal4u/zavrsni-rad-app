@@ -33,7 +33,7 @@
       v-on:click="openInNewTab(image.images)"
         ></b-carousel-slide>
 </b-carousel>
-<router-link v-if="mineGallery" class="btn btn-primary" :to="{ name: 'edit-gallery', params: { id: loggedUser }}">Edit
+<router-link v-if="mineGallery" class="btn btn-primary" :to="{ name: 'edit-gallery', params: { id: gallery.id }}">Edit
     </router-link>
 <button v-if="mineGallery" @click.prevent="deleteGallery">Delete</button>
 </div>
@@ -46,7 +46,7 @@
     		<p class="card-text" >{{comment.user.first_name}} {{comment.user.last_name}}</p>
     		<p class="card-text">Comment creation date: {{ comment.created_at }} </p>
     		<p class="card-text">Comment: {{ comment.comment }} </p>
-    		<button class="btn btn-primary" v-if="loggedUser == comment.user.user_id">Delete</button>
+    		<button id="comment.id" @click.prevent="deleteComment(comment.id)" class="btn btn-primary" v-if="loggedUser == stringCommentUserId(comment.user_id)">Delete</button>
     	</div>
     </div>
     <div>
@@ -174,8 +174,26 @@ import { comments } from '../services/Comment'
         					this.$router.go(this.$router.currentRoute)
         				})
 
+			},
+			stringCommentUserId(element){
+				return element.toString()
+			},
+			deleteComment(id){
+					comments.remove(id)
+					.then((response)=>{
+						console.log(response.data)
+					})
+					.catch((error)=>{
+						console.log(error)
+					})
+					.then(()=>{
+        					
+        					this.$router.go(this.$router.currentRoute)
+        				})
 			}
+
 		},
+		
 		updated: function () {
   					this.$nextTick(function () {
 	    				if ( this.loggedUser == this.currentUserId) {
