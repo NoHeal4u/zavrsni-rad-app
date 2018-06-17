@@ -76,12 +76,12 @@
   
 
   </div>
-  <div class="form-group row">
+  <div class="float-sm-right">
     <div class="col-xs-offset-4 col-xs-8">
-    	
+    	<div class="btn-group" role="group"  aria-label="Basic example">
       		<button v-bind:disabled="errors.any() || !isComplete" name="submit" type="submit" class="btn btn-primary">Submit</button>
       		<button name="submit" @click.prevent="cancel" class="btn btn-primary">Cancel</button>
-      	
+      	</div>
     </div>
   </div>
 </form>
