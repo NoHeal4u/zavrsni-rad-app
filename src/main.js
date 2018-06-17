@@ -15,7 +15,7 @@ Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(VeeValidate)
 // Vue.use(MyDirectives)
-
+Vue.prototype.$eventHub = new Vue();
 new Vue({
   router,	
   render: h => h(App)

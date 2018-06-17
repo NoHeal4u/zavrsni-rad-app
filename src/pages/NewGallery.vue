@@ -35,7 +35,9 @@
       class="form-control"
       name="gallery_description"
       v-validate="{ max: 1000 }" 
-      type="text">
+      type="text"
+      >
+
 
     </div>
   </div>
@@ -46,19 +48,23 @@
   		
     <div class="form-group"
     	v-for="(images, index) in newGallery.images">
-    <label for="description" class="control-label col-xs-4">Add image (index: {{ index }} )</label> 
+    
     <div class="col-xs-8">
     	<br>
+    	<span v-show="errors.has('image_' + newGallery.images[index].id)" style="color:red;">{{ errors.first('image_' + newGallery.images[index].id) }}</span>
     	<span v-show="errors.has('gallery_image')" style="color:red;" >{{ errors.first('gallery_image') }}</span>
     	<br>
     	<div class="form-group row">
+    	<label for="description" class="control-label col-xs-4">Image: {{ index }} </label> 
       <input 
+      :key="newGallery.images.id"
       autofocus
       v-model="images.image"
       placeholder="Image URL" 
       class="form-control"
-      name="gallery_image"
-      v-validate="{ required: true,  url , regex: /(?:(?:(?:\.jpg))|(?:(?:\.jpeg))|(?:(?:\.png)))/ }" 
+      :name="'image_' + newGallery.images[index].id"
+      v-validate="{ required: true,  url , regex: /(?:(?:(?:\.jpg))|(?:(?:\.jpeg))|(?:(?:\.png)))/ }"
+      required 
       >
        <button  class="btn btn-sml" @click.prevent="removeImage(index)" >Remove image</button>
        <button  class="btn btn-sml" @click.prevent="moveUp(index)" >Move image up</button>
@@ -98,14 +104,16 @@ import { galleries } from '../services/Galleries'
 					
 				},
 				notifyOneImage : false,
-				arrayStrings: [].
-				loggedUser
+				arrayStrings: [],
+				loggedUser : '',
+				id: 0
 			}
 		},
 		methods: {
 			addNewImageInput(){
-				this.newGallery.images.push({image:''})
-
+				this.newGallery.images.push({id: this.id++, image:''})
+				// this.inputs.push({ id: this.id++, username: null });
+				console.log(this.newGallery)
 			
 			},
 			addNewGallery(){
@@ -130,7 +138,7 @@ import { galleries } from '../services/Galleries'
         				})
 			},
 			removeImage(index){
-				if (index != 0){
+				if (Object.keys(this.newGallery.images).length > 1){
 					this.newGallery.images.splice(index, 1)
 				}else{
 					this.notifyOneImage = true
@@ -163,3 +171,4 @@ import { galleries } from '../services/Galleries'
    }
 </script>
 
+<!-- v-validate="{ required: true,  url , regex: /(?:(?:(?:\.jpg))|(?:(?:\.jpeg))|(?:(?:\.png)))/ }"  -->

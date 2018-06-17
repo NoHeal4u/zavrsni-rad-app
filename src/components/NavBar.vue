@@ -25,7 +25,11 @@
     created(){
       // this.loggedUser = window.localStorage.getItem('userId')
       // console.log(JSON.stringify(this.loggedUser))
-      authService.isAuthenticated()
+      // authService.isAuthenticated()
+      this.$eventHub.$on('logged-in', this.getCurrentUser);
+    },
+    beforeDestroy() {
+      this.$eventHub.$off('logged-in');
     },
 
     methods: {
@@ -33,6 +37,9 @@
         authService.logout()
         this.isAuthenticated = false
         this.$router.push({ name: 'login' })
+      },
+      getCurrentUser(){
+        this.isAuthenticated = authService.isAuthenticated()
       }
     }
   }

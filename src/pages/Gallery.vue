@@ -33,6 +33,8 @@
       v-on:click="openInNewTab(image.images)"
         ></b-carousel-slide>
 </b-carousel>
+<router-link v-if="mineGallery" class="btn btn-primary" :to="{ name: 'edit-gallery', params: { id: loggedUser }}">Edit
+    </router-link>
 <button v-if="mineGallery" @click.prevent="deleteGallery">Delete</button>
 </div>
 
