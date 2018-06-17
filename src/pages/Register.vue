@@ -157,6 +157,7 @@ import { register } from '../services/Register'
        
         authService.login(this.newUser.email, this.newUser.password)
         .then(()=>{
+        this.$eventHub.$emit('logged-in');
         this.$router.push({ name: 'galleries'}) //ovo treba promeniti
         })
       //  }else{this.validationFailedRegex = true}

@@ -37,14 +37,54 @@
     </router-link>
 <button v-if="mineGallery" @click.prevent="deleteGallery">Delete</button>
 </div>
+<div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title"> Comments </h5>
+    <div v-for="comment in comments">
+    	<div>
+    		<p class="card-text" >Author:</p>
+    		<p class="card-text" >{{comment.user.first_name}} {{comment.user.last_name}}</p>
+    		<p class="card-text">Comment creation date: {{ comment.created_at }} </p>
+    		<p class="card-text">Comment: {{ comment.comment }} </p>
+    		<button class="btn btn-primary" v-if="loggedUser == comment.user.user_id">Delete</button>
+    	</div>
+    </div>
+    <div>
+  
 
-<!-- <img v-for="image in images" v-bind:src="image.images"> -->
+  <form class="form-horizontal"  @submit.prevent="addComment">
+  <div class="form-group">
+    <label for="first_name" class="control-label col-xs-4">Type your comment</label> 
+    <div class="col-xs-8">
+      <span v-show="errors.has('Comment')" style="color:red;" >{{ errors.first('Comment') }}</span>
+      <br>
+      <input 
+      v-validate="{ required: true, max : 1000}"
+      name="Comment" 
+      v-model="newComment.comment" 
+      class="form-control" 
+      required="required" 
+      type="textarea">
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-xs-offset-4 col-xs-8">
+      <button v-bind:disabled="errors.any()" name="submit" type="submit" class="btn btn-primary">Add Comment</button>
+    </div>
+  </div>
+</form>
+    </div>
+    
+  </div>
+</div>
+
 </div>
 </template>
 
 <script>
 
 import { galleries } from '../services/Galleries'
+import { comments } from '../services/Comment'
 
 	export default {
 		
@@ -52,8 +92,14 @@ import { galleries } from '../services/Galleries'
 			return {
 				gallery:[],
 				mineGallery: false,
+				mineComment: false,
 				loggedUser: '',
-				currentUserId: ''
+				currentUserId: '',
+				comments: [],
+				newComment: {
+					comment: '',
+					gallery_id: ''
+				}
 				
 			}
 		},
@@ -65,9 +111,11 @@ import { galleries } from '../services/Galleries'
 			galleries.get(this.$route.params.id)
 			.then((response) => {
 				console.log(response.data)
-				this.gallery = response.data
+				this.gallery = response.data.gallery
+				this.comments = response.data.comments
 				this.currentUserId = this.gallery.user_id.toString()
 				this.loggedUser = window.localStorage.getItem('userId')
+				console.log(this.gallery)
 				// console.log(this.gallery)
 			}).catch((error)=>{
 				console.log(error)
@@ -91,9 +139,9 @@ import { galleries } from '../services/Galleries'
 				// console.log(this.isThisGalleryMine)
 				
 
-				console.log(this.currentUserId)
-				console.log(this.loggedUser)
-				console.log(this.mineGallery)
+				// console.log(this.currentUserId)
+				// console.log(this.loggedUser)
+				// console.log(this.mineGallery)
 			},
 			deleteGallery(){
 				if (confirm("Confirm deletion!")) {
@@ -109,6 +157,23 @@ import { galleries } from '../services/Galleries'
 					})
 
 				} 
+			},
+			addComment(){
+				this.newComment.gallery_id = this.gallery.id
+				comments.add(this.newComment)
+					.then((response)=>{
+          				this.galleries = response.data
+          				console.log(this.galleries)
+          
+        			})
+        				.catch((error)=>{
+          				console.log(error)
+
+        				}).then(()=>{
+        					// this.$router.push({ name: 'gallery', params: { id: `${this.gallery.id}` } }) //ovo treba promeniti
+        					this.$router.go(this.$router.currentRoute)
+        				})
+
 			}
 		},
 		updated: function () {
@@ -116,6 +181,10 @@ import { galleries } from '../services/Galleries'
 	    				if ( this.loggedUser == this.currentUserId) {
 							this.mineGallery = true
 						}else { this.mineGallery = false }
+
+						// if ( this.loggedUser == this.currentUserId) {
+						// 	this.mineGallery = true
+						// }else { this.mineGallery = false }
   					})
 				}	
 		
