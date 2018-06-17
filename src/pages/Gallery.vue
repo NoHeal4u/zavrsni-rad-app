@@ -116,14 +116,7 @@ import { galleries } from '../services/Galleries'
 						}else { this.mineGallery = false }
   					})
 				}	
-		// computed:{
-		// 	isThisGalleryMine : function (){
-		// 		if (window.localStorage.getItem('userId') === this.gallery.user_id) {
-		// 			return true
-		// 		} return false
-		// 	}
-
-		// }
+		
 
 
 	}
